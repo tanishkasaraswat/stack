@@ -1,0 +1,264 @@
+
+public class stack {
+    static class Node{
+        int data;
+        Node next;
+        Node(int data){
+            this.data=data;
+            this.next=null;
+        }
+    }
+    /*static class Stack{
+        static ArrayList<Integer> list = new ArrayList<>();
+        public static boolean isEmpty(){.
+            return (list.size()==0);
+        }
+        public static void push(int data){
+            list.add(data);
+        }
+        public static int pop(){
+            if(isEmpty())
+                return -1;
+            int top=list.get(list.size()-1);
+            list.remove(list.size()-1);
+            return top;
+        }
+        public static int peek(){1
+            return list.get(list.size()-1);
+        }
+    }*/
+
+   /* static class Stack{
+        static Node head=null;
+        public static boolean isEmpty(){
+            return head==null;
+        }
+
+        public static void push(int data){
+            Node nwNode=new Node(data);
+            if(isEmpty()){
+                head=nwNode;
+                return;
+            }
+            nwNode.next=head;
+            head=nwNode;
+        }
+
+        public static int pop(){
+            if (isEmpty())
+                return -1;
+            int data=head.data;
+            head=head.next;
+            return data;
+        }
+
+        public static int peek() {
+            if (isEmpty())
+                return -1;
+            return head.data;
+        }
+    }*/
+
+    public static void main(String[] args){
+       // String s="(({[]}())";
+       // String s="((a+b)+(c+d))";
+       /* int[] arr={2,1,5,6,2,3};
+        System.out.println(areaHist(arr));
+*/
+        //int[] arr={6,8,0,1,3};
+      /* int[] stock={100,80,60,70,60,85,100};
+        int[] span=new int[arr.length];
+       greaterEle(arr,span);
+       System.out.println(Arrays.toString(span));*/
+        Stack<Integer> s=new Stack<>();
+        s.push(1);
+        s.push(2);
+        s.push(3);
+        //stkRev1(s);
+        printStk(s);
+       // stkRev(s);
+        insertLast(4,s);
+          printStk(s);
+       /* String str="java";
+        Stack<Character> s=new Stack<>();
+        for(int i=0;i<str.length();i++){
+            s.add(str.charAt(i));
+        }
+        System.out.println(strRev("",s));*/
+
+    }
+
+    public static void printStk(Stack<Integer> s){
+        while(!s.isEmpty()){
+            System.out.println(s.peek());
+            s.pop();
+        }
+    }
+    public static void insertLast(int data,Stack<Integer> s){
+        if(s.isEmpty()){
+            s.push(data);
+            return;
+        }
+        int top=s.pop();
+        insertLast(data,s);
+        s.push(top);
+    }
+
+    public static String strRev(String ans,Stack<Character> s){
+        while(!s.isEmpty()){
+            ans+=s.pop();
+        }
+        return ans;
+    }
+
+    public static void stkRev(Stack<Integer> s){
+        Stack<Integer> ans=new Stack<>();
+        while (!s.isEmpty()){
+            ans.push(s.pop());
+        }
+        printStk(ans);
+    }
+
+    public static void stkRev1(Stack<Integer> s){
+        if(s.isEmpty())
+            return;
+
+        int top=s.pop();
+        stkRev1(s);
+        insertLast(top,s);
+    }
+
+    public static void stockSpan(int[] stock, int[] span){      //previous greater element
+        Stack<Integer> s=new Stack<>();
+        span[0]=1;
+        s.push(0);
+        for(int i=1;i< span.length;i++){
+            int curr=stock[i];
+            while(!s.isEmpty() && curr>stock[s.peek()]){
+                s.pop();
+            }
+            if(s.isEmpty()){
+                span[i]=i+1;
+            }
+            else {
+                int prevHigh= s.peek();
+                span[i]=i-prevHigh;
+            }
+            s.push(i);
+        }
+    }
+
+    public static void greaterEle(int[] stock,int[] span ){     //next greater element  //next greater right,left smaller, right
+        Stack<Integer> s=new Stack<>();
+        int n=span.length;
+        for(int i=n-1;i>=0;i--){
+            int curr=stock[i];
+            while(!s.isEmpty() && curr>=stock[s.peek()]){
+                s.pop();
+            }
+            if(s.isEmpty()){
+                span[i]=-1;
+            }
+            else {
+                span[i] = stock[s.peek()];
+            }
+            s.push(i);
+        }
+    }
+
+    public static boolean isValid(String s) {
+        Stack<Character> stk= new Stack<>();
+
+        if(s.length()%2!=0) return false;
+
+        for(char curr:s.toCharArray()){
+
+            if(curr=='{' || curr=='(' || curr=='['){
+                stk.push(curr);
+            }
+            else{
+
+                if(stk.isEmpty()) return false;
+
+                if( (curr=='}' && stk.peek()=='{')
+                        || (curr==']' && stk.peek()=='[')
+                        || (stk.peek()=='(' && curr==')') ){
+                    stk.pop();
+                }
+                else{
+                    return false;
+                }
+
+            }
+
+        }
+
+        if(stk.isEmpty()) return true;
+
+        return false;
+    }
+
+    public static boolean dupPar(String s){
+        Stack<Character> stk=new Stack<>();
+        for(char x:s.toCharArray()){
+            if(x==')'){
+                int count=0;
+                while(!stk.isEmpty() && stk.peek()!='('){
+                    count++;
+                    stk.pop();
+                }
+                if(count==0)    return true;
+                stk.pop();
+            }
+            else{
+                stk.push(x);
+            }
+        }
+        return false;
+    }
+
+    public static int areaHist(int[] heights){
+        int mxArea=0;
+        int[] nsr=new int[heights.length];
+        int[] nsl=new int[heights.length];
+
+        //next smaller right
+        Stack<Integer> s=new Stack<>();
+        for(int i= heights.length-1;i>=0;i--){
+            int curr=heights[i];
+            while (!s.isEmpty() && curr<=heights[s.peek()]){
+                s.pop();
+            }
+            if(s.isEmpty()){
+                nsr[i]=heights.length;
+            }else {
+                nsr[i] = s.peek();
+            }
+            s.push(i);
+        }
+
+        //prev smaller left
+        s=new Stack<>();
+        for(int i=0;i<heights.length;i++){
+            int curr=heights[i];
+            while (!s.isEmpty() && curr<=heights[s.peek()]){
+                s.pop();
+            }
+            if(s.isEmpty()){
+                nsl[i]=heights.length;
+            }else {
+                nsl[i] = s.peek();
+            }
+             s.push(i);
+        }
+
+        for(int i=0;i<heights.length;i++){
+            int h=heights[i];
+            int w=nsr[i]=nsl[i]-1;
+            int curArea=h*w;
+            mxArea=Math.max(curArea,mxArea);
+        }
+        return mxArea;
+    }
+}
+
