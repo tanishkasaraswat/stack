@@ -1,4 +1,4 @@
-
+//implementation with ll = Amazon
 public class stack {
     static class Node{
         int data;
@@ -94,6 +94,8 @@ public class stack {
             s.pop();
         }
     }
+
+    //push at Bottom = Amazon
     public static void insertLast(int data,Stack<Integer> s){
         if(s.isEmpty()){
             s.push(data);
@@ -119,7 +121,7 @@ public class stack {
         printStk(ans);
     }
 
-    public static void stkRev1(Stack<Integer> s){
+    public static void stkRev1(Stack<Integer> s){    //Amazon
         if(s.isEmpty())
             return;
 
@@ -128,7 +130,7 @@ public class stack {
         insertLast(top,s);
     }
 
-    public static void stockSpan(int[] stock, int[] span){      //previous greater element
+    public static void stockSpan(int[] stock, int[] span){      //previous greater element = Amazon
         Stack<Integer> s=new Stack<>();
         span[0]=1;
         s.push(0);
@@ -198,7 +200,7 @@ public class stack {
         return false;
     }
 
-    public static boolean dupPar(String s){
+    public static boolean dupPar(String s){    //Microsoft, Google
         Stack<Character> stk=new Stack<>();
         for(char x:s.toCharArray()){
             if(x==')'){
@@ -217,7 +219,7 @@ public class stack {
         return false;
     }
 
-    public static int areaHist(int[] heights){
+    public static int areaHist(int[] heights){    //Microsoft Paytm Facebook
         int mxArea=0;
         int[] nsr=new int[heights.length];
         int[] nsl=new int[heights.length];
